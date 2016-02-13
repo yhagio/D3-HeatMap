@@ -9,7 +9,7 @@ d3.json(data_url, function(err, jsonData) {
   var margin = {
     top: 30,
     right: 0,
-    bottom: 50,
+    bottom: 80,
     left: 80
   };
   
@@ -63,10 +63,10 @@ d3.json(data_url, function(err, jsonData) {
   // X-Axis Label
   xAxis.append('text')
     .attr({
-      "transform": "translate("+(width-margin.left)/2+","+ margin.bottom +")",
+      "transform": "translate("+(width-margin.left)/2+","+ (margin.bottom / 2) +")",
       "class": "labelText"
     })
-    .text('Year');
+    .text('Years');
 
   /***************
     Y-Axis
@@ -119,12 +119,79 @@ d3.json(data_url, function(err, jsonData) {
       },
       width: cellWidth,
       height: cellHeight,
-      fill: function(d) { return assignColor(d, baseTemp)},
+      fill: function(d) {
+        return assignColor(d, baseTemp)
+      },
       transform: 'translate('+margin.left+',0)'
     });
+
+  /***************
+    Add heat map temperature indicator at bottom-right
+  ***************/
+
+  var colors = [
+    'rgb(94, 79, 162)',
+    'rgb(50, 136, 189)',
+    'rgb(102, 194, 165)',
+    'rgb(171, 221, 164)',
+    'rgb(230, 245, 152)',
+    'rgb(255, 255, 191)',
+    'rgb(254, 224, 139)',
+    'rgb(253, 174, 97)',
+    'rgb(244, 109, 67)',
+    'rgb(213, 62, 79)',
+    'rgb(158, 1, 66)'
+  ];
+
+  var colorsLabelTexts = [
+    0.0,
+    2.7,
+    3.9,
+    5.0,
+    6.1,
+    7.2,
+    8.3,
+    9.4,
+    10.5,
+    11.6,
+    12.7
+  ];
+
+  for (var i = 0; colors.length > i; i++) {
+    svg.append('rect')
+      .attr({
+        x: function() {
+          return (width / 2) + margin.left * 2 + (i*35);
+        },
+        y: function() {
+          return height + margin.top + 10;
+        },
+        width: 35,
+        height: 20,
+        fill: function() {
+          return colors[i];
+        }
+      });
+
+    svg.append('text')
+      .attr({
+        x: function() {
+          return (width / 2) + margin.left * 2 + (i*35) + 5;
+        },
+        y: function() {
+          return height + margin.top + 42;
+        },
+        class: 'colorsLabelText'
+      })
+      .text(function() {
+        return colorsLabelTexts[i];
+      })
+  }
+
+
 }); 
 
-// Assign color depending on the temperature
+// HELPER : Assign color depending on the temperature
 function assignColor(d, baseTemp) {
   var temp = baseTemp + parseFloat(d.variance);
 

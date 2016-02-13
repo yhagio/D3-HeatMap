@@ -62,4 +62,9 @@ body {
 /* Label Text */
 text.labelText {
   font-size: 1.2em;
+  font-weight: bold;
+}
+
+.colorsLabelText {
+  font-size: 0.7em;
 }
