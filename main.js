@@ -14,7 +14,7 @@ d3.json(data_url, function(err, jsonData) {
   };
   
   var width = 1100 - margin.left - margin.right;
-  var height = 700 - margin.top - margin.bottom;
+  var height = 600 - margin.top - margin.bottom;
   
   // Get min max year
   var minYear = d3.min(jsonData.monthlyVariance, function(d) { return d.year; });
@@ -123,7 +123,48 @@ d3.json(data_url, function(err, jsonData) {
         return assignColor(d, baseTemp)
       },
       transform: 'translate('+margin.left+',0)'
+    })
+    /****  ADD Tooltip ****/
+    .on('mouseover', function(d) {
+      console.log( d3.mouse(this) );
+
+      d3.select('#tooltip')
+        .transition()
+        .ease('quad')
+        .duration(100)
+        .style("opacity", 1);
+
+      d3.select('#tooltip')
+        .style("left", d3.mouse(this)[0] + 50 + "px")
+        .style("top", d3.mouse(this)[1] + 30 + "px")
+        .select("#value")
+          .html(
+            '<strong class="yearMonth">'+d.year+' - '+ months[d.month-1]+'</strong>'+
+            '<p>' + (parseFloat(8.66)+parseFloat(d.variance)).toFixed(2) + ' ℃</p>'+
+            '<p>'+parseFloat(d.variance)+' ℃</p>');
+    })
+    .on('mouseout', function() {
+      d3.select('#tooltip')
+        .transition()
+        .ease('quad')
+        .duration(100)
+        .style("opacity", 0);
     });
+
+    var months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
 
   /***************
     Add heat map temperature indicator at bottom-right
