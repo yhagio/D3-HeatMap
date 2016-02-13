@@ -57,3 +57,9 @@ body {
 .axis.y line {
   display: none;
 }
+
+
+/* Label Text */
+text.labelText {
+  font-size: 1.2em;
+}
