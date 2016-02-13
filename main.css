@@ -50,5 +50,10 @@ body {
 
 .axis text {
   font-family: sans-serif;
-  font-size: 0.7em;
+  font-size: 0.8em;
+}
+
+.axis.y path,
+.axis.y line {
+  display: none;
 }

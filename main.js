@@ -7,7 +7,7 @@ d3.json(data_url, function(err, jsonData) {
     top: 30,
     right: 0,
     bottom: 30,
-    left: 50
+    left: 70
   };
 
   var width = 1100 - margin.left - margin.right;
@@ -15,7 +15,6 @@ d3.json(data_url, function(err, jsonData) {
 
   var minYear = d3.min(jsonData.monthlyVariance, function(d) { return d.year; });
   var maxYear = d3.max(jsonData.monthlyVariance, function(d) { return d.year; });
-  console.log(minYear, maxYear);
 
   /***** Create SVG *****/
   var svg = d3.select('body')
@@ -33,7 +32,8 @@ d3.json(data_url, function(err, jsonData) {
   var xAxisCreate = d3.svg.axis()
     .scale(xScale)
     .ticks(24)
-    .orient('bottom');
+    .orient('bottom')
+    .tickFormat(function(d) { return d;});
 
   var xAxis = svg.append('g')
     .call(xAxisCreate)
@@ -43,4 +43,20 @@ d3.json(data_url, function(err, jsonData) {
     });
 
   /***** Y-Axis *****/
+  var yScale = d3.time.scale()
+    .domain([new Date(2012, 0, 1), new Date(2012, 11, 31)])
+    .range([0, height]);
+
+  var yAxisCreate = d3.svg.axis()
+    .scale(yScale)
+    .orient('left')
+    .ticks(d3.time.months)
+    .tickFormat(d3.time.format('%B'));
+
+  var xAxis = svg.append('g')
+    .call(yAxisCreate)
+    .attr({
+      'class': 'axis y',
+      'transform': 'translate('+margin.left+', '+margin.top+')'
+    });
 });
