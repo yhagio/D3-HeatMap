@@ -28,6 +28,8 @@ d3.json(data_url, function(err, jsonData) {
   var minVar = d3.min(jsonData.monthlyVariance, function(d) { return d.variance; });
   var maxVar = d3.max(jsonData.monthlyVariance, function(d) { return d.variance; });
 
+  var baseTemp = parseFloat(jsonData.baseTemperature);
+  
   /*************** 
     Create SVG 
   ***************/
@@ -117,12 +119,56 @@ d3.json(data_url, function(err, jsonData) {
       },
       width: cellWidth,
       height: cellHeight,
-      fill: function(d) { return randomColor(d)},
+      fill: function(d) { return assignColor(d, baseTemp)},
       transform: 'translate('+margin.left+',0)'
     });
 }); 
 
-function randomColor(d) {
-  var items = ['red', 'blue', 'green', 'yellow', 'pink', 'grey', 'orange', 'purple', 'skyblue', 'silver', 'gold', 'brown'];
-  return items[d.month-1];
+// Assign color depending on the temperature
+function assignColor(d, baseTemp) {
+  var temp = baseTemp + parseFloat(d.variance);
+
+  if (temp <= 2.7) {
+    return 'rgb(94, 79, 162)';
+  } 
+
+  if ((2.7 < temp) && (temp <= 3.9)) {
+    return 'rgb(50, 136, 189)';
+  }
+
+  if ((3.9 < temp) && (temp <= 5)) {
+    return 'rgb(102, 194, 165)';
+  }
+
+  if ((5 < temp) && (temp <= 6.1)) {
+    return 'rgb(171, 221, 164)';
+  }
+
+  if ((6.1 < temp) && (temp <= 7.2)) {
+    return 'rgb(230, 245, 152)';
+  }
+
+  if ((7.2 < temp) && (temp <= 8.3)) {
+    return 'rgb(255, 255, 191)';
+  }
+
+  if ((8.3 < temp) && (temp <= 9.4)) {
+    return 'rgb(254, 224, 139)';
+  }
+
+  if ((9.4 < temp) && (temp <= 10.5)) {
+    return 'rgb(253, 174, 97)';
+  }
+
+  if ((10.5 < temp) && (temp <= 11.6)) {
+    return 'rgb(244, 109, 67)';
+  }
+
+  if ((11.6 < temp) && (temp <= 12.7)) {
+    return 'rgb(213, 62, 79)';
+  }
+
+  if (12.7 < temp) {
+    return 'rgb(158, 1, 66)';
+  }
 }
